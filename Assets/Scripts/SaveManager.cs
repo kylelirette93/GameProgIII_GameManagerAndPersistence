@@ -2,6 +2,9 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
+/// <summary>
+/// Responsible for saving and loading game data.
+/// </summary>
 public class SaveManager : MonoBehaviour
 {
     public void SaveGame()
@@ -26,7 +29,7 @@ public class SaveManager : MonoBehaviour
 
     public void LoadGame()
     {
-        // Open the file, get the data and assign stats to data.
+        // If a file exists, open it and assign data to stats class.
         if (File.Exists(Application.persistentDataPath + "/playerInfo.dat"))
         {
             BinaryFormatter BF = new BinaryFormatter();
@@ -55,7 +58,9 @@ public class SaveManager : MonoBehaviour
     }
 }
 
-
+/// <summary>
+/// Holds player stats for saving and loading. Serializable for binary formatting.
+/// </summary>
 [System.Serializable]
 public class PlayerData
 {

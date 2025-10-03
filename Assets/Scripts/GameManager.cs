@@ -2,6 +2,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Game Manager manages game state. For the sake of this demo it only handles scene loading.
+/// </summary>
 public class GameManager : Singleton<GameManager>
 {
     static int gameManagerCount = 0;
@@ -11,12 +14,13 @@ public class GameManager : Singleton<GameManager>
     protected override void Awake()
     {
         base.Awake();
-        // For debug purposes.
+        // For debug purposes. Ensure only one instance exists.
         gameManagerCount++;
         debugText.text = "GameManager Count: " + gameManagerCount;
     }
     private void Update()
     {
+        // Handle loading scenes based on key presses.
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             SceneManager.LoadScene(0);

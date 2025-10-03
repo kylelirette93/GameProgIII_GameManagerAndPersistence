@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Holds player stats at runtime.
+/// </summary>
 public class PlayerStats : MonoBehaviour
 {
     public int health;

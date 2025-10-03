@@ -2,6 +2,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Displays and updates stats in the UI.
+/// </summary>
 public class UIManager : MonoBehaviour
 {
     public PlayerStats playerStats;
@@ -19,8 +22,10 @@ public class UIManager : MonoBehaviour
     {
         UpdateUI();
     }
+
     public void UpdateUI()
     {
+        // Update text based on stats.
         healthText.text = "Health: " + playerStats.health;
         dexterityText.text = "Dexterity: " + playerStats.dexterity;
         intelligenceText.text = "Intelligence: " + playerStats.intelligence;
@@ -32,6 +37,7 @@ public class UIManager : MonoBehaviour
 
     public void IncreaseStat(string statName)
     {
+        // Increases a stat by name.
         switch (statName.ToLower())
         {
             case "health":
@@ -64,6 +70,7 @@ public class UIManager : MonoBehaviour
 
     public void DecreaseStat(string statName)
     {
+        // Decreases a stat by name.
         switch (statName.ToLower())
         {
             case "health":

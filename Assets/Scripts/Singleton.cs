@@ -1,10 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// Generic singleton class. Any class that derrives from this will be a singleton.
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
+    // Static entry point to access singleton instance.
     static T instance;
     public static T Instance
     {
@@ -22,9 +24,10 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             return instance;
         }
     }
-
+    
     protected virtual void Awake()
     {
+        #region Singleton Pattern
         if (instance != null && instance != this)
         {
             Destroy(gameObject);
@@ -35,5 +38,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             instance = this as T;
             DontDestroyOnLoad(gameObject);
         }
+        #endregion
     }
 }
