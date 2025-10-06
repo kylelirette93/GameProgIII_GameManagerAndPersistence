@@ -5,7 +5,7 @@ using UnityEngine;
 /// </summary>
 public class PlayerStats : MonoBehaviour
 {
-    public int health;
+    public int health = 100;
     public int dexterity;
     public int intelligence;
     public int strength;

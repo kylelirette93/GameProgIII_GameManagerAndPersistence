@@ -1,6 +1,8 @@
+using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Responsible for saving and loading game data.
@@ -9,35 +11,47 @@ public class SaveManager : MonoBehaviour
 {
     public void SaveGame()
     {
-        // Create a new save file, after applying stats to data.
+        // Obtain stats object to save data to it.
         PlayerStats stats = FindFirstObjectByType<PlayerStats>();
         if (stats == null) return;
 
-        PlayerData data = new PlayerData();
-        data.health = stats.health;
-        data.dexterity = stats.dexterity;
-        data.intelligence = stats.intelligence;
-        data.strength = stats.strength;
-        data.xp = stats.xp;
-        data.score = stats.score;
-        data.level = stats.level;
+        // Create binary formatter.
         BinaryFormatter BF = new BinaryFormatter();
+        // Create file at path to save to.
         FileStream file = File.Create(Application.persistentDataPath + "/playerInfo.dat");
+        // Create data object and pass stats to data.
+        PlayerData data = new PlayerData 
+        {
+            health = stats.health,
+            dexterity = stats.dexterity,
+            intelligence = stats.intelligence,
+            strength = stats.strength,
+            xp = stats.xp,
+            score = stats.score,
+            level = stats.level
+        };
+
+        // Serialize data to file and close it.
         BF.Serialize(file, data);
         file.Close();
     }
 
     public void LoadGame()
     {
-        // If a file exists, open it and assign data to stats class.
+        // Check if a file already exists.
         if (File.Exists(Application.persistentDataPath + "/playerInfo.dat"))
         {
+            // Create binary formatter.
             BinaryFormatter BF = new BinaryFormatter();
+            // Open existing file.
             FileStream file = File.Open(Application.persistentDataPath + "/playerInfo.dat", FileMode.Open);
+            // Deserialize file and cast to data.
             PlayerData data = (PlayerData)BF.Deserialize(file);
             file.Close();
 
             PlayerStats stats = FindFirstObjectByType<PlayerStats>();
+            if (stats == null) return;
+            
             stats.health = data.health;
             stats.dexterity = data.dexterity;
             stats.intelligence = data.intelligence;
@@ -45,13 +59,28 @@ public class SaveManager : MonoBehaviour
             stats.xp = data.xp;
             stats.score = data.score;
             stats.level = data.level;
+
+            SceneManager.LoadScene(data.level);
         }
         else
         {
-            // Start a new game if no save exists.
+            PlayerStats stats = FindFirstObjectByType<PlayerStats>();
+            if (stats == null) return;
+
+            // No save file exists to load. Start a new game.
             BinaryFormatter BF = new BinaryFormatter();
             FileStream file = File.Create(Application.persistentDataPath + "/playerInfo.dat");
             PlayerData data = new PlayerData();
+            data.health = stats.health;
+            data.dexterity = stats.dexterity;
+            data.intelligence = stats.intelligence;
+            data.strength = stats.strength;
+            data.xp = stats.xp;
+            data.score = stats.score;
+            data.level = stats.level;
+
+            SceneManager.LoadScene(data.level);
+
             BF.Serialize(file, data);
             file.Close();
         }
@@ -61,8 +90,8 @@ public class SaveManager : MonoBehaviour
 /// <summary>
 /// Holds player stats for saving and loading. Serializable for binary formatting.
 /// </summary>
-[System.Serializable]
-public class PlayerData
+[Serializable]
+class PlayerData
 {
     public int health;
     public int dexterity;

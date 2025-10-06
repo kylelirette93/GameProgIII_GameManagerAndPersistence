@@ -14,7 +14,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             if (instance == null)
             {
-                instance = FindObjectOfType<T>();
+                instance = FindFirstObjectByType<T>();
                 if (instance == null)
                 {
                     GameObject singletonGO = new GameObject(typeof(T).Name);
@@ -33,11 +33,9 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        else
-        {
-            instance = this as T;
-            DontDestroyOnLoad(gameObject);
-        }
+        instance = this as T;
+        DontDestroyOnLoad(gameObject);
+        
         #endregion
     }
 }

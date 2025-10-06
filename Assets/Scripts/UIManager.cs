@@ -1,6 +1,6 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Displays and updates stats in the UI.
@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public PlayerStats playerStats;
+    public TextMeshProUGUI sceneText;
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI dexterityText;
     public TextMeshProUGUI intelligenceText;
@@ -15,7 +16,6 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI xpText;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI levelText;
-    public Button loadButton;
 
 
     private void Update()
@@ -26,6 +26,7 @@ public class UIManager : MonoBehaviour
     public void UpdateUI()
     {
         // Update text based on stats.
+        sceneText.text = SceneManager.GetActiveScene().name;
         healthText.text = "Health: " + playerStats.health;
         dexterityText.text = "Dexterity: " + playerStats.dexterity;
         intelligenceText.text = "Intelligence: " + playerStats.intelligence;
@@ -59,7 +60,10 @@ public class UIManager : MonoBehaviour
                 playerStats.score++;
                 break;
             case "level":
-                playerStats.level++;
+                if (playerStats.level < SceneManager.sceneCountInBuildSettings - 1)
+                {
+                    playerStats.level++;
+                }
                 break;
             default:
                 Debug.LogWarning("Stat not found: " + statName);
@@ -92,7 +96,8 @@ public class UIManager : MonoBehaviour
                 playerStats.score--;
                 break;
             case "level":
-                playerStats.level--;
+                if (playerStats.level > 0)
+                    playerStats.level--;
                 break;
             default:
                 Debug.LogWarning("Stat not found: " + statName);

@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class GameManager : Singleton<GameManager>
 {
-    static int gameManagerCount = 0;
+    static int gameManagerCount;
     public TextMeshProUGUI debugText;
 
 
