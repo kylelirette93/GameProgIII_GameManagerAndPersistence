@@ -8,6 +8,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     // Static entry point to access singleton instance.
     static T instance;
+    protected static int instanceCount = 0;
     public static T Instance
     {
         get
@@ -19,6 +20,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 {
                     GameObject singletonGO = new GameObject(typeof(T).Name);
                     instance = singletonGO.AddComponent<T>();
+                    instanceCount++;
                 }
             }
             return instance;

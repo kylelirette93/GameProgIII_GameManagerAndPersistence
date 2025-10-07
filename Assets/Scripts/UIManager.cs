@@ -1,11 +1,12 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
 /// Displays and updates stats in the UI.
 /// </summary>
-public class UIManager : MonoBehaviour
+public class UIManager : Singleton<UIManager>
 {
     public PlayerStats playerStats;
     public TextMeshProUGUI sceneText;
@@ -16,11 +17,28 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI xpText;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI levelText;
+    public Button LoadButton;
+    public Button SaveButton;
+    public Button DeleteSave;
+    public Button QuitButton;
+
+    private void Awake()
+    {
+        base.Awake();
+        playerStats = FindFirstObjectByType<PlayerStats>();
+        LoadButton.onClick.AddListener(SaveManager.Instance.LoadGame);
+        SaveButton.onClick.AddListener(SaveManager.Instance.SaveGame);
+        DeleteSave.onClick.AddListener(SaveManager.Instance.DeleteSave);
+        QuitButton.onClick.AddListener(Application.Quit);
+    }
 
 
     private void Update()
     {
-        UpdateUI();
+        if (playerStats != null)
+        {
+            UpdateUI();
+        }
     }
 
     public void UpdateUI()
@@ -60,10 +78,7 @@ public class UIManager : MonoBehaviour
                 playerStats.score++;
                 break;
             case "level":
-                if (playerStats.level < SceneManager.sceneCountInBuildSettings - 1)
-                {
-                    playerStats.level++;
-                }
+                playerStats.level++;           
                 break;
             default:
                 Debug.LogWarning("Stat not found: " + statName);
@@ -96,8 +111,7 @@ public class UIManager : MonoBehaviour
                 playerStats.score--;
                 break;
             case "level":
-                if (playerStats.level > 0)
-                    playerStats.level--;
+                playerStats.level--;
                 break;
             default:
                 Debug.LogWarning("Stat not found: " + statName);

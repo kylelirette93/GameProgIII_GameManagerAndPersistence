@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,17 +8,11 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class GameManager : Singleton<GameManager>
 {
-    static int gameManagerCount;
-    public TextMeshProUGUI debugText;
-
-
     protected override void Awake()
     {
         base.Awake();
-        // For debug purposes. Ensure only one instance exists.
-        gameManagerCount++;
-        debugText.text = "GameManager Count: " + gameManagerCount;
     }
+
     private void Update()
     {
         // Handle loading scenes based on key presses.

@@ -1,18 +1,24 @@
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Responsible for saving and loading game data.
 /// </summary>
-public class SaveManager : MonoBehaviour
+public class SaveManager : Singleton<SaveManager>
 {
+    PlayerStats stats;
+    public void Awake()
+    {
+        base.Awake();
+        // Obtain stats object to save data to it.
+        stats = FindFirstObjectByType<PlayerStats>();
+    }
     public void SaveGame()
     {
-        // Obtain stats object to save data to it.
-        PlayerStats stats = FindFirstObjectByType<PlayerStats>();
         if (stats == null) return;
 
         // Create binary formatter.
@@ -49,7 +55,6 @@ public class SaveManager : MonoBehaviour
             PlayerData data = (PlayerData)BF.Deserialize(file);
             file.Close();
 
-            PlayerStats stats = FindFirstObjectByType<PlayerStats>();
             if (stats == null) return;
             
             stats.health = data.health;
@@ -59,8 +64,6 @@ public class SaveManager : MonoBehaviour
             stats.xp = data.xp;
             stats.score = data.score;
             stats.level = data.level;
-
-            SceneManager.LoadScene(data.level);
         }
         else
         {
@@ -79,10 +82,19 @@ public class SaveManager : MonoBehaviour
             data.score = stats.score;
             data.level = stats.level;
 
-            SceneManager.LoadScene(data.level);
-
             BF.Serialize(file, data);
             file.Close();
+        }
+        SceneManager.LoadScene(1);
+    }
+
+    public void DeleteSave()
+    {
+        // Deletes an existing save file.
+        if (File.Exists(Application.persistentDataPath + "/playerInfo.dat"))
+        {
+            File.Delete(Application.persistentDataPath + "/playerInfo.dat");
+            stats.Reset();
         }
     }
 }
